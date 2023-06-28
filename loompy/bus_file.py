@@ -64,7 +64,7 @@ twobit_to_dna_table = {0: "A", 1: "C", 2: "G", 3: "T"}
 dna_to_twobit_table = {"A": 0, "C": 1, "G": 2, "T": 3}
 
 
-@jit
+@jit(nopython=False)
 def twobit_to_dna(twobit: int, size: int) -> str:
 	result = []
 	for i in range(size):
@@ -81,7 +81,7 @@ def twobit_to_dna(twobit: int, size: int) -> str:
 	return "".join(result)
 
 
-@jit
+@jit(nopython=False)
 def dna_to_twobit(dna: str) -> int:
 	x = 0
 	for nt in dna:
@@ -98,7 +98,7 @@ def dna_to_twobit(dna: str) -> int:
 	return x
 
 
-@jit
+@jit(nopython=False)
 def twobit_1hamming(twobit: int, size: int) -> List[int]:
 	result = []
 	for i in range(size):
@@ -371,7 +371,7 @@ def create_from_fastq(out_file: str, sample_id: str, fastqs: List[str], index_pa
 		technology			String like "10xv2" or None to read the technology from the sample metadata file
 		expected_n_cells	Expected number of cells captured in the sample, or None to read the number from the sample metadata file
 		samples_metadata_file	Path to tab-delimited file with one header row OR path to sqlite database with one table called "sample"
-	
+
 	Remarks:
 		Samples metadata table should contain these columns:
 			name			Sample name (i.e. sample id)
@@ -388,7 +388,7 @@ def create_from_fastq(out_file: str, sample_id: str, fastqs: List[str], index_pa
 		raise ValueError("Samples metadata file not found")
 	with open(manifest_file) as f:
 		manifest = json.load(f)
-	
+
 	metadata = load_sample_metadata(samples_metadata_file, sample_id)
 
 	if (("technology" not in metadata) and ("chemistry" not in metadata)) or ("targetnumcells" not in metadata):
